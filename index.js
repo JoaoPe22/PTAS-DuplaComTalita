@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 
 const express = require("express");
 const app = express();
+app.use(express.json())
 
 //Responde a qualquer requisição encaminhada para 
 // /auth/algumaCoisa
