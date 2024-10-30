@@ -1,22 +1,49 @@
-const {PrismaClient} = require ("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-class AuthController{
-    static async cadastro(req,res){
+const bcryptjs = require("bcryptjs");
+const jwt = require("bcryptjs");
+
+class AuthController {
+  static async cadastro(req, res) {
+    const { nome, email, password, tipo } = req.body;
+
+    if (!nome || nome.length < 6) {
+      return res.json({
+        erro: true,
+        mensagem: "Caracteres insufientes",
+      });
     }
 
-    static async login(req,res){
-        res.json({
-            email: req.body.email,
-            password: req.body.password,
-        });
-    }
+    return res.json({
+      erro: false,
+      mensagem: "Usuário cadastrado",
+      token: "dfsdfvsdsdvxv578s",
+    });
+  }
 
-    static async loginForm(req,res){
-        res.send(
-            "<form action = '/auth/login' method = 'post'><input type = 'email' name = 'email'/><input type = 'password' name = 'password'/><input type = 'submit' value = 'Entrar'></form>"
-        );
-    }
+//   const salt = 
+
+  static async login(req, res) {
+    const {email, password} = req.body;
+
+    const usuario = await prisma.usuario.findUnique({
+        where:{
+
+        }
+
+
+    })
+    const token = jwt.sing({id: usuario.id}, "1234567890", {
+        expiresIn: "1h",
+
+
+    })
+    res.json({
+        erro: false,
+        mensagem:"Autenticado "    
+    })
+  }
 }
 
 module.exports = AuthController;
