@@ -14,7 +14,7 @@ class AuthController{
 
     static async loginForm(req,res){
         res.send(
-            "<form action = 'auth/login' method = 'post'><input type = 'email' name = 'email'/><input type = 'password' name = 'password'/><input type = 'submit' value = 'Entrar'></form>"
+            "<form action = '/auth/login' method = 'post'><input type = 'email' name = 'email'/><input type = 'password' name = 'password'/><input type = 'submit' value = 'Entrar'></form>"
         );
     }
 }
