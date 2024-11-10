@@ -1,3 +1,7 @@
 1. clone repositório
 2. npm i
 3. npx prisma generate
+
+Outros comandos:
+- npx prisma studio (serve para visualizar banco de dados)
+- npx prisma migrate dev --name alter_usuario
