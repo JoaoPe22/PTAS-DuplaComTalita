@@ -1,92 +1,109 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../prisma/prismaClient");
 
 const bcryptjs = require("bcryptjs");
 const jwt = require("bcryptjs");
 
 class AuthController {
   static async cadastro(req, res) {
-    const { nome, email, password} = req.body;
+    const { nome, email, password } = req.body;
 
     if (!nome || nome.length < 6) {
-      return res.json({
+      return res.status(422).json({
         erro: true,
         mensagem: "Caracteres insufientes (min. nome: 6)",
       });
     }
 
-    if (!email || email.length < 10){
-      return res.json({
+    if (!email || email.length < 10) {
+      return res.status(422).json({
         erro: true,
         mensagem: "Caracteres insufientes (min. email: 10)",
       });
     }
 
-    if (!password || password.length < 10){
-      return res.json({
+    if (!password || password.length < 10) {
+      return res.status(422).json({
         erro: true,
         mensagem: "Caracteres insufientes (min. senha: 8)",
       });
     }
 
     const existe = await prisma.usuario.count({
-      where:{
+      where: {
         email: email,
       },
     });
 
-    if (existe != 0){
-      return res.json({
+    if (existe != 0) {
+      return res.status(422).json({
         erro: true,
-        mensagem: "Usuário já existe"
-      })
+        mensagem: "Usuário já existe",
+      });
     }
 
     const salt = bcryptjs.genSaltSync(10);
     const hashPassword = bcryptjs.hashSync(password, salt);
 
-    try{
+    try {
       const usuario = await prisma.usuario.create({
-        data:{
+        data: {
           nome: nome,
           email: email,
           password: hashPassword,
           tipo: "cliente",
         },
       });
-
-      return res.json({
-        erro: false,
-        mensagem: "Usuário cadastrado"
+      console.log(JSON.stringify(usuario));
+      const token = jwt.sing({ id: usuario.id }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
       });
-    } catch  (error) {
-      return res.json({
+
+      return res.status(201).json({
+        erro: false,
+        mensagem: "Usuário cadastrado",
+        token: token,
+      });
+    } catch (error) {
+      return res.status(500).json({
         erro: true,
         mensagem: "Ocorreu um erro, tente novamente mais tarde." + error,
       });
     }
-    
   }
 
   static async login(req, res) {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     const usuario = await prisma.usuario.findUnique({
-        where:{
+      where: {
+        email: email,
+      },
+    });
 
-        }
+    if (!usuario) {
+      return res.status(422).json({
+        erro: true,
+        mensagem: "Usuario não foi encontrado",
+      });
+    }
 
+    const senhaCorreta = bcryptjs.compareSync(password, usuario.password);
 
-    })
-    const token = jwt.sing({id: usuario.id}, "1234567890", {
-        expiresIn: "1h",
+    if (!senhaCorreta) {
+      return res.status(422).json({
+        erro: true,
+        mensagem: "Senha Incorreta",
+      });
+    }
 
-
-    })
-    res.json({
-        erro: false,
-        mensagem:"Autenticado "    
-    })
+    const token = jwt.sing({ id: usuario.id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({
+      erro: false,
+      mensagem: "Autenticado ",
+      token: token,
+    });
   }
 }
 
