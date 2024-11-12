@@ -56,7 +56,7 @@ class AuthController {
 
       console.log(JSON.stringify(usuario));
 
-      const token = jwt.sing({ id: usuario.id }, process.env.SECRET_KEY, {
+      const token = jwt.sign({ id: usuario.id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
 
@@ -103,7 +103,7 @@ class AuthController {
     const token = jwt.sign({ id: usuario.id }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
-    
+
     res.status(200).json({
       erro: false,
       mensagem: "Autenticado com sucesso :)",
