@@ -5,3 +5,4 @@
 Outros comandos:
 - npx prisma studio (serve para visualizar banco de dados)
 - npx prisma migrate dev --name alter_usuario
+- npm i json web token
