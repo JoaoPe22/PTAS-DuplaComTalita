@@ -21,7 +21,7 @@ class AuthController {
       });
     }
 
-    if (!password || password.length < 10) {
+    if (!password || password.length < 8) {
       return res.status(422).json({
         erro: true,
         mensagem: "Caracteres insufientes (min. senha: 8)",
