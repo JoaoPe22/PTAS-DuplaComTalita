@@ -2,6 +2,7 @@ const prisma = require("../prisma/prismaClient");
 
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { json } = require("stream/consumers");
 
 class AuthController {
   static async cadastro(req, res) {
@@ -108,6 +109,23 @@ class AuthController {
       erro: false,
       mensagem: "Autenticado com sucesso :)",
       token: token,
+    });
+  }
+
+  static async verificaAutenticacao(req, res, next) {
+    const authorization = req.headers["authorization"];
+
+    const token = authorization && authorization.split("")[1];
+
+    if (!token) {
+      return res.status(422).json({ message: "Token nã0 encontrado!" });
+    }
+    jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
+      if (err) {
+        return res.status(401).json({ msg: "Token inválido" });
+      }
+      req.usuarioId = payload.id;
+      next();
     });
   }
 }
