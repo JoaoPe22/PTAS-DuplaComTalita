@@ -15,9 +15,13 @@ app.use(
 
 app.use(express.json());
 
+// const profileRoutes = require("./routes/profileRoutes");
+// app.use("/perfil", profileRoutes);
+
 //Responde a qualquer requisição encaminhada para
 // /auth/algumaCoisa
 const authRoutes = require("./routes/authRoutes");
+
 
 //middleware//
 app.use("/auth", authRoutes);
