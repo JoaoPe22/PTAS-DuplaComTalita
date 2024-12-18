@@ -1,8 +1,7 @@
+//Padrão Singleton
 const prisma = require("./prisma/prismaClient");
-
-const express = require("express");
-
 const AuthController = require("./controllers/AuthController");
+const express = require("express");
 
 const cors = require("cors");
 
@@ -15,22 +14,17 @@ app.use(
 
 app.use(express.json());
 
-// const profileRoutes = require("./routes/profileRoutes");
-// app.use("/perfil", profileRoutes);
-
 //Responde a qualquer requisição encaminhada para
 // /auth/algumaCoisa
+
+//Rota de autenticação
 const authRoutes = require("./routes/authRoutes");
-
-
 //middleware//
 app.use("/auth", authRoutes);
 
-// Teste
-app.get("/privado", AuthController.verificaAutenticacao, (req, res) => {
-  res.json({
-    msg: "rota restrita",
-  });
-});
+const perfilRoutes =  require("./routes/perfilRoutes");
+app.use("/perfil", AuthController.autenticar, perfilRoutes); 
 
-app.listen(8000);
+app.listen(8000, () => {
+  console.log("Servidor rodando na porta 8000.");
+});
