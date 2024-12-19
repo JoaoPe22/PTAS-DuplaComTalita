@@ -9,7 +9,15 @@ class PerfilController {
   }
 
   static async atualizaPerfil(req, res) {
-    
+    prisma.usuario.update({
+      where: {
+        id: req.usuarioId
+      },
+      data: {
+        email: email,
+        nome: nome, 
+      }
+    });
   }
 }
 
