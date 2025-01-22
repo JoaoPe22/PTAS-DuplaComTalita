@@ -25,6 +25,9 @@ app.use("/auth", authRoutes);
 const perfilRoutes =  require("./routes/perfilRoutes");
 app.use("/perfil", AuthController.autenticar, perfilRoutes); 
 
+const mesaRoutes =  require("./routes/mesaRoutes");
+app.use("/mesa", AuthController.autenticar, mesaRoutes);
+
 app.listen(8000, () => {
   console.log("Servidor rodando na porta 8000.");
 });
