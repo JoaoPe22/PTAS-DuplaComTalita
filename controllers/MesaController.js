@@ -7,10 +7,11 @@ class MesaController {
 
     static async novaMesa(req,res){
         const { codigo, n_lugares } = req.body;
+        return res.json({mensagem: "sucesso ao acessar cadastro de mesa"});
     }
 
     static async dispMesa(req,res){
-        const { codigo, n_lugares } = req.body;
+        const { data } = req.body;
     }
 }
 

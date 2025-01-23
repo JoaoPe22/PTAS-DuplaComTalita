@@ -29,7 +29,7 @@ class PerfilController {
   }
 
   static async atualizaPerfil(req, res) {
-    const { nome, email, password } = req.body;
+    const { nome, email } = req.body;
 
     if (!nome || nome.length < 6) {
       return res.status(422).json({
