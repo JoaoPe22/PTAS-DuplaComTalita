@@ -4,7 +4,7 @@ class PerfilController {
   //Ver perfil
   static async getPerfil(req, res) {
     try {
-      const usuario = await prisma.find.findUnique({
+      const usuario = await prisma.usuario.findUnique({
         where: { id: req.usuarioId },
         omit: { password: true },
       });
