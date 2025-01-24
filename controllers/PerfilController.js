@@ -67,6 +67,25 @@ class PerfilController {
       });
     }
   }
+
+  static async listarPerfis(req, res) {
+    try {
+      const usuarios = await prisma.usuario.findMany({
+        omit: { password: true }
+      });
+      
+      res.status(200).json({
+        erro: false,
+        mensagem: "Perfis listados com sucesso",
+        usuarios,
+      });
+    }catch(error){
+    res.status(500).json({
+      erro: true,
+      mensagem: "Ocorreu um erro, tente novamente mais tarde." + error,
+    });
+    }
+  }
 }
 
 module.exports = PerfilController;

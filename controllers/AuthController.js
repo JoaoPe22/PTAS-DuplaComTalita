@@ -112,6 +112,8 @@ class AuthController {
     });
   }
 
+  //Middleware para checar se usuário está autenticado
+
   static async verificaAutenticacao(req, res, next) {
     const authorization = req.headers["authorization"];
 
@@ -122,12 +124,27 @@ class AuthController {
     }
     jwt.verify(token, process.env.SECRET_KEY, (err, payload) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.status(401).json({ msg: "Token inválido" });
       }
       req.usuarioId = payload.id;
       next();
     });
+  }
+
+  //Middleware para checar se usuário é ADM
+  static async verificaAdm(req, res, next) {
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: req.usuarioId },
+    });
+    if (usuario.tipo === "adm") {
+      next();
+    } else {
+      return res.status(401).json({
+        erro: true,
+        mensagem: "Você não tem permissão para acessar este recurso",
+      });
+    }
   }
 }
 
