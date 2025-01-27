@@ -54,7 +54,7 @@ class MesaController {
 
   // Consultar mesas disponíveis por data
   static async dispMesa(req, res) {
-    const { data } = req.query;
+    const { data } = req.body;
 
     if (!data) {
       return res.status(422).json({
@@ -64,10 +64,10 @@ class MesaController {
     }
 
     try {
-      const mesas = await prisma.mesa.findMany({
+      const mesasDisp = await prisma.mesa.findMany({
         include: {
           reservas: {
-            where: { data: newDate(data) },
+            where: { data: new Date(data) },
           },
         },
       });
@@ -75,6 +75,7 @@ class MesaController {
       res.status(200).json({
         erro: false,
         mensagem: "Mesas disponíveis listadas com sucesso",
+        mesasDisp,
       });
     } catch (error) {
       return res.status(500).json({
