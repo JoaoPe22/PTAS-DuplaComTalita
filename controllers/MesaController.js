@@ -54,7 +54,7 @@ class MesaController {
 
   // Consultar mesas disponíveis por data
   static async dispMesa(req, res) {
-    const { data } = req.body;
+    const data = new Date(req.body.data);
 
     if (!data) {
       return res.status(422).json({
@@ -67,7 +67,7 @@ class MesaController {
       const mesasDisp = await prisma.mesa.findMany({
         include: {
           reservas: {
-            where: { data: new Date(data) },
+            where: { data: data },
           },
         },
       });
