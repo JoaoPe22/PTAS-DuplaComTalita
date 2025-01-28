@@ -8,13 +8,13 @@ class MesaController {
 
       res.status(200).json({
         erro: false,
-        mensagem: "Mesas listados com sucesso",
+        mensagem: "Mesas listadas com sucesso",
         mesas,
       });
     } catch (error) {
       res.status(500).json({
         erro: true,
-        mensagem: "Erro ao listar mesas: " + error.mensagem,
+        mensagem: "Ocorreu um erro, tente novamente mais tarde." + error,
       });
     }
   }
