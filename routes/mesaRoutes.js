@@ -11,6 +11,6 @@ router.post(
   AuthController.verificaAdm,
   MesaController.novaMesa
 );
-router.get("/disponibilidade", MesaController.dispMesa);
+router.post("/disponibilidade", MesaController.dispMesa);
 
 module.exports = router;

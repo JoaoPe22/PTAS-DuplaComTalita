@@ -65,9 +65,11 @@ class MesaController {
 
     try {
       const mesasDisp = await prisma.mesa.findMany({
-        include: {
+        where: {
           reservas: {
-            where: { data: data },
+            some: {
+              data: data,
+            },
           },
         },
       });
@@ -78,6 +80,7 @@ class MesaController {
         mesasDisp,
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({
         erro: true,
         mensagem: "Ocorreu um erro, tente novamente mais tarde." + error,
