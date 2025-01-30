@@ -174,6 +174,45 @@ class ReservaController {
       });
     }
   }
+
+  static async atualizarReserva(req, res) {
+    const {n_pessoas, reservaId} = req.body
+
+    if (!reservaId) {
+        return res.status(422).json({
+          erro: true,
+          mensagem: "O ID da reserva é obrigatório.",
+        });
+      }
+
+    try {
+      const reserva = await prisma.reserva.findUnique({
+        where: { id: reservaId },
+      });
+
+      if (!reserva) {
+        return res.status(404).json({
+          erro: true,
+          mensagem: "Reserva não encontrada.",
+        });
+      }
+
+      await prisma.reserva.update({
+        where: { id: reservaId },
+        data: { n_pessoas: parseInt(n_pessoas) },
+      });
+
+      return res.status(200).json({
+        erro: false,
+        mensagem: "Reserva atualizada.",
+      });
+    } catch (error) {
+      res.status(500).json({
+        erro: true,
+        mensagem: "Ocorreu um erro, tente novamente mais tarde." + error,
+      });
+    }
+  }
 }
 
 module.exports = ReservaController;

@@ -68,7 +68,7 @@ class MesaController {
         where: {
           reservas: {
             some: {
-              data: data,
+              NOT: { data: data },
             },
           },
         },
