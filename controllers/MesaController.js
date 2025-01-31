@@ -66,11 +66,16 @@ class MesaController {
     try {
       const mesasDisp = await prisma.mesa.findMany({
         where: {
-          reservas: {
-            some: {
-              NOT: { data: data },
+          OR: [
+            {
+              reservas: {
+                some: {
+                  NOT: { data: data },
+                },
+              },
             },
-          },
+            { reservas: { none: {} } },
+          ],
         },
       });
 
